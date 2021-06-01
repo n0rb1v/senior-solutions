@@ -27,6 +27,10 @@ public class MeetingRoom {
         return lenght;
     }
 
+    public int getArea() {
+        return width * lenght;
+    }
+
     @Override
     public String toString() {
         return name;
