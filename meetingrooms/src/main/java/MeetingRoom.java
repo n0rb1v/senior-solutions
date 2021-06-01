@@ -29,11 +29,6 @@ public class MeetingRoom {
 
     @Override
     public String toString() {
-        return "MeetingRoom{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", width=" + width +
-                ", lenght=" + lenght +
-                '}';
+        return name;
     }
 }
