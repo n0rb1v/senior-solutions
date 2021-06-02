@@ -12,10 +12,10 @@ public class MeetingRoomController {
     }
 
     private void start() {
-        meetingRoomsService.save("sdf",6,6);
-        meetingRoomsService.save("ghf",5,9);
-        meetingRoomsService.save("acf",3,5);
-        meetingRoomsService.save("uof",7,3);
+        meetingRoomsService.save("arabia",3,7);
+        meetingRoomsService.save("manhattan",6,6);
+        meetingRoomsService.save("raktar",5,7);
+        meetingRoomsService.save("targyalo",8,5);
 
         do {
             System.out.println(
@@ -43,31 +43,28 @@ public class MeetingRoomController {
                     System.out.println(meetingRoomsService.evenListMeetingRooms());
                     break;
                 case 4:
-                    for (MeetingRoom item: meetingRoomsService.areaListMeetingRooms()) {
-                        System.out.println(item.getName()+":"+item.getWidth()+":"+item.getLenght()
-                        +":"+item.getArea());
+                    for (MeetingRoom item : meetingRoomsService.areaListMeetingRooms()) {
+                        System.out.println(item.getName() + ":" + item.getWidth() + ":" + item.getLenght()
+                                + ":" + item.getArea());
                     }
                     break;
                 case 5:
-                    MeetingRoom m = meetingRoomsService.findByName(input("nev:")).orElse(new MeetingRoom(0L,"",0,0));
+                    MeetingRoom m = meetingRoomsService.findByName(input("nev:")).orElse(new MeetingRoom(0L, "", 0, 0));
                     if (!m.getName().isEmpty()) {
-                        System.out.println(m.getWidth()+":"+m.getLenght()+":"+m.getArea());
+                        System.out.println(m.getWidth() + ":" + m.getLenght() + ":" + m.getArea());
                     }
                     break;
                 case 6:
-                    MeetingRoom pm = meetingRoomsService.findByPartname(input("nev toredek:")).orElse(new MeetingRoom(0L,"",0,0));
+                    MeetingRoom pm = meetingRoomsService.findByPartname(input("nev toredek:")).orElse(new MeetingRoom(0L, "", 0, 0));
                     if (!pm.getName().isEmpty()) {
-                        System.out.println(pm.getWidth()+":"+pm.getLenght()+":"+pm.getArea());
+                        System.out.println(pm.getWidth() + ":" + pm.getLenght() + ":" + pm.getArea());
                     }
                     break;
                 case 7:
-                    for (MeetingRoom item: meetingRoomsService.findByArea(Integer.parseInt(input("terulet:")))) {
-                        System.out.println(item.getName()+":"+item.getWidth()+":"+item.getLenght()
-                                +":"+item.getArea());
+                    for (MeetingRoom item : meetingRoomsService.findByArea(Integer.parseInt(input("terulet:")))) {
+                        System.out.println(item.getName() + ":" + item.getWidth() + ":" + item.getLenght()
+                                + ":" + item.getArea());
                     }
-
-
-
             }
         }
         while (menu != 8);

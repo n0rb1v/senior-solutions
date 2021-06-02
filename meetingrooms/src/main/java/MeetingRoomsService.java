@@ -16,9 +16,7 @@ public class MeetingRoomsService {
     }
 
     public List<MeetingRoom> listMeetingRooms() {
-        return meetingRoomsRepository.findAll().stream()
-                .sorted(Comparator.comparing(MeetingRoom::getName))
-                .collect(Collectors.toList());
+        return meetingRoomsRepository.findAll();
     }
 
     public List<MeetingRoom> revListMeetingRooms() {

@@ -14,7 +14,9 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
 
     @Override
     public List<MeetingRoom> findAll() {
-        return new ArrayList<>(meetingRooms);
+        return meetingRooms.stream()
+                .sorted(Comparator.comparing(MeetingRoom::getName))
+                .collect(Collectors.toList());
     }
 
     @Override
