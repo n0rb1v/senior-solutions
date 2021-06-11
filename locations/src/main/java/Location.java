@@ -35,6 +35,20 @@ public class Location {
         this.lon = lon;
     }
 
+    public boolean isOnEquator() {
+        if (lat == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isOnPrimeMeridian() {
+        if (lon == 0) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
