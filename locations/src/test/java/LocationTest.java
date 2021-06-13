@@ -1,6 +1,4 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,5 +61,14 @@ class LocationTest {
                 IllegalArgumentException.class, () -> new Location("test",0,-188));
         assertEquals("hibas parameter3", iae4.getMessage());
 
+    }
+
+    private String[][] values = {{"A,34.67,66.87", "false"}, {"B,0,34.63", "true"}, {"C,-5.77,0", "false"}};
+
+    @RepeatedTest(value = 3, name = " isOnEquator {currentRepetition}/{totalRepetitions}")
+    void testIsOnEquator(RepetitionInfo repetitionInfo) {
+        Location location = lp.parse(values[repetitionInfo.getCurrentRepetition()-1][0]);
+        Boolean bool = Boolean.parseBoolean(values[repetitionInfo.getCurrentRepetition()-1][1]);
+        assertEquals(bool, location.isOnEquator());
     }
 }
