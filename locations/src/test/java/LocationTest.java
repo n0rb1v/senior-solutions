@@ -1,4 +1,10 @@
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,26 +55,51 @@ class LocationTest {
     @Test
     void illegalParameter() {
         IllegalArgumentException iae1 = assertThrows(
-                IllegalArgumentException.class, () -> new Location("test",99,0));
+                IllegalArgumentException.class, () -> new Location("test", 99, 0));
         assertEquals("hibas parameter2", iae1.getMessage());
         IllegalArgumentException iae2 = assertThrows(
-                IllegalArgumentException.class, () -> new Location("test",-99,0));
+                IllegalArgumentException.class, () -> new Location("test", -99, 0));
         assertEquals("hibas parameter2", iae2.getMessage());
         IllegalArgumentException iae3 = assertThrows(
-                IllegalArgumentException.class, () -> new Location("test",0,188));
+                IllegalArgumentException.class, () -> new Location("test", 0, 188));
         assertEquals("hibas parameter3", iae3.getMessage());
         IllegalArgumentException iae4 = assertThrows(
-                IllegalArgumentException.class, () -> new Location("test",0,-188));
+                IllegalArgumentException.class, () -> new Location("test", 0, -188));
         assertEquals("hibas parameter3", iae4.getMessage());
 
     }
 
-    private String[][] values = {{"A,34.67,66.87", "false"}, {"B,0,34.63", "true"}, {"C,-5.77,0", "false"}};
-
     @RepeatedTest(value = 3, name = " isOnEquator {currentRepetition}/{totalRepetitions}")
-    void testIsOnEquator(RepetitionInfo repetitionInfo) {
-        Location location = lp.parse(values[repetitionInfo.getCurrentRepetition()-1][0]);
-        Boolean bool = Boolean.parseBoolean(values[repetitionInfo.getCurrentRepetition()-1][1]);
-        assertEquals(bool, location.isOnEquator());
+    void testIsOnEquator(RepetitionInfo repInfo) {
+        assertEquals(values[repInfo.getCurrentRepetition() - 1][1],
+                ((Location) values[repInfo.getCurrentRepetition() - 1][0]).isOnEquator());
+    }
+
+    private Object[][] values = {
+            {new Location("A", 34.67, 66.87), false},
+            {new Location("B", 0, 66.87), true},
+            {new Location("C", 34.67, 0), false}
+    };
+
+    @ParameterizedTest(name = "data: {0} - isPrimeMeridian: {1}")
+    @MethodSource("createData")
+    void testIsOnPrimeMeridianMethodSource(Location location, Boolean bool) {
+        assertEquals(bool, location.isOnPrimeMeridian());
+    }
+
+    static Stream<Arguments> createData() {
+        return Stream.of(
+                Arguments.arguments(new Location("A", 34.67, 66.87), false),
+                Arguments.arguments(new Location("B", 0, 66.87), false),
+                Arguments.arguments(new Location("C", 34.67, 0), true)
+        );
+    }
+
+    @ParameterizedTest(name = "data: {0} - isPrimeMeridian: {1}")
+    @CsvFileSource(resources = "/data.csv")
+    void testCSVSource(String s1, double lat1, double lon1, String s2, double lat2, double lon2, double distance) {
+        Location l1 = new Location(s1, lat1, lon1);
+        Location l2 = new Location(s2, lat2, lon2);
+        assertEquals(distance, l1.distanceFrom(l2), 0.01);
     }
 }
