@@ -1,9 +1,16 @@
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,5 +116,21 @@ class LocationTest {
                 .map(loc -> DynamicTest.dynamicTest("is on Equator: " + loc[1] +": "+ loc[0],
                         () -> assertEquals(Boolean.parseBoolean(loc[1]), lp.parse(loc[0]).isOnEquator())
                 ));
+    }
+
+    @TempDir
+    Path tempDir;
+    @Test
+    void testWriteLocation() throws IOException {
+        Path file = tempDir.resolve("location.csv");
+        List<Location> locationList = List.of(
+                new Location("A", 34.67, 66.87),
+                new Location("B", 0, 66.87),
+                new Location("C", 34.67,0));
+        new LocationService().writeLocations(file,locationList);
+
+        assertEquals("A,34.67,66.87\n" +
+                "B,0.0,66.87\n" +
+                "C,34.67,0.0\n", Files.readString(file));
     }
 }
