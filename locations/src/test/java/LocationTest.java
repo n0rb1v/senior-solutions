@@ -102,4 +102,12 @@ class LocationTest {
         Location l2 = new Location(s2, lat2, lon2);
         assertEquals(distance, l1.distanceFrom(l2), 0.01);
     }
+
+    @TestFactory
+    Stream<DynamicTest> testDynamic() {
+        return Stream.of(new String[][]{{"A,34.67,66.87", "false"}, {"B,0,66.87", "true"}, {"C,34.67,0", "false"}})
+                .map(loc -> DynamicTest.dynamicTest("is on Equator: " + loc[1] +": "+ loc[0],
+                        () -> assertEquals(Boolean.parseBoolean(loc[1]), lp.parse(loc[0]).isOnEquator())
+                ));
+    }
 }
