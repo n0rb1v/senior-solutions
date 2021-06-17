@@ -42,17 +42,11 @@ public class Location {
     }
 
     public boolean isOnEquator() {
-        if (lat == 0) {
-            return true;
-        }
-        return false;
+        return lat == 0;
     }
 
     public boolean isOnPrimeMeridian() {
-        if (lon == 0) {
-            return true;
-        }
-        return false;
+        return lon == 0;
     }
 
     public double distanceFrom(Location loc) {
