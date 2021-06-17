@@ -1,3 +1,5 @@
+package meetingrooms;
+
 public class MeetingRoom {
     private Long id;
     private String name;

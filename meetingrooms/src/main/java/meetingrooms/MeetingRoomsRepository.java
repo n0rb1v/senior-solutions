@@ -1,3 +1,5 @@
+package meetingrooms;
+
 import java.util.List;
 
 public interface MeetingRoomsRepository {

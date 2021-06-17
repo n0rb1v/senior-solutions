@@ -1,3 +1,6 @@
+import meetingrooms.MariaDbMeetingRoomsRepository;
+import meetingrooms.MeetingRoom;
+import meetingrooms.MeetingRoomsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
