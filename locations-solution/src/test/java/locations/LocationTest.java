@@ -1,5 +1,6 @@
 package locations;
 
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -120,21 +121,22 @@ class LocationTest {
     @TestFactory
     Stream<DynamicTest> testDynamic() {
         return Stream.of(new String[][]{{"A,34.67,66.87", "false"}, {"B,0,66.87", "true"}, {"C,34.67,0", "false"}})
-                .map(loc -> DynamicTest.dynamicTest("is on Equator: " + loc[1] +": "+ loc[0],
+                .map(loc -> DynamicTest.dynamicTest("is on Equator: " + loc[1] + ": " + loc[0],
                         () -> assertEquals(Boolean.parseBoolean(loc[1]), lp.parse(loc[0]).isOnEquator())
                 ));
     }
 
     @TempDir
     Path tempDir;
+
     @Test
     void testWriteLocation() throws IOException {
         Path file = tempDir.resolve("location.csv");
         List<Location> locationList = List.of(
                 new Location("A", 34.67, 66.87),
                 new Location("B", 0, 66.87),
-                new Location("C", 34.67,0));
-        new LocationService().writeLocations(file,locationList);
+                new Location("C", 34.67, 0));
+        new LocationService().writeLocations(file, locationList);
 
         assertEquals("A,34.67,66.87\n" +
                 "B,0.0,66.87\n" +
@@ -144,7 +146,7 @@ class LocationTest {
     @Test
     void hamcrestTest() {
         List<Location> result = new LocationService().readLocation(Path.of("src/test/resources/locations.csv"));
-        assertThat(result,contains( //hasItem
+        assertThat(result, contains( //hasItem
                 allOf(hasProperty("name", is("A")),
                         hasProperty("lat", is(34.67)),
                         hasProperty("lon", is(66.87))),
@@ -163,11 +165,17 @@ class LocationTest {
         assertThat(result)
                 .hasSize(3)
                 .extracting(Location::getName, Location::getLat, Location::getLon)
-                .contains(tuple("A",34.67,66.87),
-                        tuple("B",0.0,66.87),
-                        tuple("C",34.67,0.0));
+                .contains(tuple("A", 34.67, 66.87),
+                        tuple("B", 0.0, 66.87),
+                        tuple("C", 34.67, 0.0));
+    }
 
-
+    @Test
+    void conditionTest() {
+        List<Location> result = new LocationService().readLocation(Path.of("src/test/resources/locations.csv"));
+        Condition<Location> zeroParam =
+                new Condition<>(l -> l.getLon() == 0 || l.getLat() == 0, "has zero param");
+        assertThat(result).areExactly(2,zeroParam);
 
     }
 }
