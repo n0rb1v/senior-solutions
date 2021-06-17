@@ -13,6 +13,10 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Assumptions.assumeThat;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -140,7 +144,7 @@ class LocationTest {
     @Test
     void hamcrestTest() {
         List<Location> result = new LocationService().readLocation(Path.of("src/test/resources/locations.csv"));
-        assertThat(result,contains(
+        assertThat(result,contains( //hasItem
                 allOf(hasProperty("name", is("A")),
                         hasProperty("lat", is(34.67)),
                         hasProperty("lon", is(66.87))),
@@ -151,5 +155,19 @@ class LocationTest {
                         hasProperty("lat", is(34.67)),
                         hasProperty("lon", is(0.0)))
         ));
+    }
+
+    @Test
+    void assertjTest() {
+        List<Location> result = new LocationService().readLocation(Path.of("src/test/resources/locations.csv"));
+        assertThat(result)
+                .hasSize(3)
+                .extracting(Location::getName, Location::getLat, Location::getLon)
+                .contains(tuple("A",34.67,66.87),
+                        tuple("B",0.0,66.87),
+                        tuple("C",34.67,0.0));
+
+
+
     }
 }
