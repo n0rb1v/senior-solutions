@@ -1,3 +1,5 @@
+import locations.Location;
+import locations.LocationOperators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

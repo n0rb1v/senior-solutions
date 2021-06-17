@@ -1,3 +1,5 @@
+package locations;
+
 public class LocationParser {
 
     public Location parse(String text) {

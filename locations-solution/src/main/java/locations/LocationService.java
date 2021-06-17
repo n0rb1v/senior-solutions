@@ -1,3 +1,5 @@
+package locations;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
