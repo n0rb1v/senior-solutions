@@ -141,9 +141,15 @@ class LocationTest {
     void hamcrestTest() {
         List<Location> result = new LocationService().readLocation(Path.of("src/test/resources/locations.csv"));
         assertThat(result,contains(
-                hasProperty("name", is("A")),
-                hasProperty("name", is("B")),
-                hasProperty("name", is("C"))
+                allOf(hasProperty("name", is("A")),
+                        hasProperty("lat", is(34.67)),
+                        hasProperty("lon", is(66.87))),
+                allOf(hasProperty("name", is("B")),
+                        hasProperty("lat", is(0.0)),
+                        hasProperty("lon", is(66.87))),
+                allOf(hasProperty("name", is("C")),
+                        hasProperty("lat", is(34.67)),
+                        hasProperty("lon", is(0.0)))
         ));
     }
 }
