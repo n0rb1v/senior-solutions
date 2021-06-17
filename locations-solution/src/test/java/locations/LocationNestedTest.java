@@ -1,3 +1,5 @@
+package locations;
+
 import locations.Location;
 import locations.LocationParser;
 import org.junit.jupiter.api.BeforeEach;

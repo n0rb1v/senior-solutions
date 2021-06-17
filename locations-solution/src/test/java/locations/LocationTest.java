@@ -1,6 +1,5 @@
-import locations.Location;
-import locations.LocationParser;
-import locations.LocationService;
+package locations;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,6 +13,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocationTest {
@@ -134,5 +135,15 @@ class LocationTest {
         assertEquals("A,34.67,66.87\n" +
                 "B,0.0,66.87\n" +
                 "C,34.67,0.0\n", Files.readString(file));
+    }
+
+    @Test
+    void hamcrestTest() {
+        List<Location> result = new LocationService().readLocation(Path.of("src/test/resources/locations.csv"));
+        assertThat(result,contains(
+                hasProperty("name", is("A")),
+                hasProperty("name", is("B")),
+                hasProperty("name", is("C"))
+        ));
     }
 }

@@ -1,4 +1,7 @@
+package locations;
+
 import locations.Location;
+import locations.LocationOperationsFeatureTest;
 import locations.LocationOperators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
