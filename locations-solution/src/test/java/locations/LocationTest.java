@@ -2,16 +2,21 @@ package locations;
 
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +26,9 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class LocationTest {
 
     private LocationParser lp;
@@ -176,6 +183,22 @@ class LocationTest {
         Condition<Location> zeroParam =
                 new Condition<>(l -> l.getLon() == 0 || l.getLat() == 0, "has zero param");
         assertThat(result).areExactly(2,zeroParam);
+
+    }
+
+    @Mock
+    LocationRepository locationRepository;
+    @InjectMocks
+    DistanceService distanceService;
+    @Test
+    void testMock() {
+        when(locationRepository.findByName("A")).thenReturn(Optional.of(new Location("A", 47.497912,19.040235)));
+        when(locationRepository.findByName("B")).thenReturn(Optional.of(new Location("B",48.210033,16.363449)));
+
+        assertEquals(214835.83, distanceService.calculateDistance("A","B").get(), 0.01);
+        assertEquals(true, distanceService.calculateDistance("B","C").isEmpty());
+        verify(locationRepository).findByName("A");
+        verify(locationRepository,times(2)).findByName("B");
 
     }
 }
