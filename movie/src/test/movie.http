@@ -1,0 +1,51 @@
+POST http://localhost:8080/api/movies
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Fukusima",
+  "length": 120
+}
+###
+POST http://localhost:8080/api/movies
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Star wars",
+  "length": 129
+}
+###
+POST http://localhost:8080/api/movies
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Mad max",
+  "length": 105
+}
+###
+
+GET http://localhost:8080/api/movies
+Accept: application/json
+###
+GET http://localhost:8080/api/movies?title=wars
+Accept: application/json
+###
+GET http://localhost:8080/api/movies/1
+Accept: application/json
+###
+
+PUT http://localhost:8080/api/movies/1/rating
+Content-Type: application/json
+Accept: application/json
+
+{
+  "rate": 3
+}
+###
+
+DELETE http://localhost:8080/api/movies
+###
+DELETE http://localhost:8080/api/movies/1
+###
