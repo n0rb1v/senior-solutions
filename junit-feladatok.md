@@ -2,11 +2,11 @@
 
 Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 
-* [ ] Bevezetés a JUnit használatába
-* [ ] Futtatás Mavennel
-* [ ] Tesztesetek életciklusa
-* [ ] Elnevezések
-* [ ] Assert
+* [x] Bevezetés a JUnit használatába
+* [x] Futtatás Mavennel
+* [x] Tesztesetek életciklusa
+* [x] Elnevezések
+* [x] Assert
 * [ ] Kivételkezelés és timeout tesztelése
 * [ ] Egymásba ágyazás
 * [ ] Tagek és metaannotációk használata
