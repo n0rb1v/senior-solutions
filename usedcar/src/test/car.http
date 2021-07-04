@@ -1,0 +1,46 @@
+POST http://localhost:8080/api
+Content-Type: application/json
+Accept: application/json
+
+{
+  "brand": "opel",
+  "carType": "kadet",
+  "age": 9,
+  "state": "BAD"
+}
+###
+POST http://localhost:8080/api
+Content-Type: application/json
+Accept: application/json
+
+{
+  "brand": "ferrari",
+  "carType": "f40",
+  "age": 5,
+  "state": "GOOD"
+}
+###
+PUT http://localhost:8080/api/1/cars
+Content-Type: application/json
+Accept: application/json
+
+{
+  "brand": "ferrari",
+  "carType": "f40",
+  "age": 5,
+  "state": "GOOD"
+}
+###
+GET http://localhost:8080/api/cars
+Accept: application/json
+###
+GET http://localhost:8080/api/cars?carType=F40
+Accept: application/json
+###
+GET http://localhost:8080/api/types
+Accept: application/json
+###
+DELETE http://localhost:8080/api
+###
+DELETE http://localhost:8080/api/1
+###
