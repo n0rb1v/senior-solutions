@@ -1,8 +1,11 @@
 package empapp;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,5 +27,10 @@ class EmployeeServiceTest {
                 .map(Employee::getName)
                 .collect(Collectors.toList())
         );
+    }
+    @Test
+    void testCalcYearly() {
+        assertTimeout(Duration.ofSeconds(6),() -> new EmployeeService().calculateYearlyReport());
+        assertTimeoutPreemptively(Duration.ofSeconds(3),() -> new EmployeeService().calculateYearlyReport());
     }
 }

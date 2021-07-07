@@ -8,6 +8,9 @@ public class Employee {
 
     public Employee(String name, int yearOfBirth) {
         this.name = name;
+        if (yearOfBirth < 1800) {
+            throw new IllegalArgumentException("year: " + yearOfBirth);
+        }
         this.yearOfBirth = yearOfBirth;
     }
 

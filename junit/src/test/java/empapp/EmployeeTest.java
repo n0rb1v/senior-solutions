@@ -2,13 +2,15 @@ package empapp;
 
 import org.junit.jupiter.api.*;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class employeeTest {
+class EmployeeTest {
     Employee employee;
 
-    public employeeTest() {
+    public EmployeeTest() {
         System.out.println("Constructor");
     }
     @BeforeAll
@@ -31,6 +33,8 @@ class employeeTest {
     }
 
     @Test
+    @Tag("unit")
+    @Tag("Feature-329")
     void age_With_Zero() {
         System.out.println("TC2");
         assertTrue(30 == employee.getAge(2000));
@@ -41,4 +45,11 @@ class employeeTest {
         assertEquals(expected,employee);
         assertNotSame(expected,employee);
     }
+
+    @UnitTest
+    void testYear1700() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Employee("John Doe",1700));
+        assertEquals("year: 1700", ex.getMessage());
+    }
+
 }
