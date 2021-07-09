@@ -1,8 +1,13 @@
 package empapp;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,4 +57,14 @@ class EmployeeTest {
         assertEquals("year: 1700", ex.getMessage());
     }
 
+    @TempDir
+    Path tempDir;
+
+    @Test
+    void testWriteEmployee() throws IOException {
+        Path file = tempDir.resolve("john-doe.txt");
+        new EmployeeWriter()
+                .write(file, List.of(new Employee("John Doe", 1970)));
+        assertEquals("John Doe, 1970\n", Files.readString(file));
+    }
 }
