@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,14 +20,14 @@ class EmployeeDaoTest {
     private EmployeeDao employeeDao;
     @BeforeEach
     void init() throws SQLException {
-        MariaDbDataSource dataSource = new MariaDbDataSource();
-        dataSource.setUrl("jdbc:mariadb://localhost:3306/employees?useUnicode=true");
-        dataSource.setUser("employees");
-        dataSource.setPassword("employees");
-
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
-        flyway.clean();
-        flyway.migrate();
+//        MariaDbDataSource dataSource = new MariaDbDataSource();
+//        dataSource.setUrl("jdbc:mariadb://localhost:3306/employees?useUnicode=true");
+//        dataSource.setUser("employees");
+//        dataSource.setPassword("employees");
+//
+//        Flyway flyway = Flyway.configure().dataSource(dataSource).locations("db/migration").load();
+//        flyway.clean();
+//        flyway.migrate();
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("pu");
         employeeDao = new EmployeeDao(entityManagerFactory);
@@ -34,7 +35,7 @@ class EmployeeDaoTest {
 
     @Test
     void testSave() {
-        Employee employee = new Employee("John Doe");
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
         employeeDao.save(employee);
 
         long id = employee.getId();
@@ -45,8 +46,8 @@ class EmployeeDaoTest {
 
     @Test
     void testListAll() {
-        employeeDao.save(new Employee("John Doe"));
-        employeeDao.save(new Employee("Jack Doe"));
+        employeeDao.save(new Employee("John Doe", Employee.EmployeeType.FULL_TIME,LocalDate.now()));
+        employeeDao.save(new Employee("Jack Doe", Employee.EmployeeType.HALF_TIME,LocalDate.now()));
 
         List<Employee> employees = employeeDao.listAll();
         assertEquals(List.of("Jack Doe", "John Doe"),employees.stream().map(Employee::getName).collect(Collectors.toList()));
@@ -54,7 +55,7 @@ class EmployeeDaoTest {
 
     @Test
     void testChange() {
-        Employee employee = new Employee("John Doe");
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
         employeeDao.save(employee);
 
         long id = employee.getId();
@@ -66,7 +67,7 @@ class EmployeeDaoTest {
     }
     @Test
     void testDelete() {
-        Employee employee = new Employee("John Doe");
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
         employeeDao.save(employee);
 
         long id = employee.getId();
@@ -77,5 +78,11 @@ class EmployeeDaoTest {
 
         assertEquals(0,employees.size());
     }
+    @Test
+    void testAttributes() {
+        employeeDao.save(new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11)));
+        Employee employee = employeeDao.listAll().get(0);
 
+        assertEquals(LocalDate.of(2000,1,11),employee.getBirth());
+    }
 }

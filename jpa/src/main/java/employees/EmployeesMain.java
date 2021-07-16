@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
 import java.util.List;
 
 public class EmployeesMain {
@@ -12,7 +13,8 @@ public class EmployeesMain {
         EntityManager em = factory.createEntityManager();
         em.getTransaction().begin();
 
-        Employee employee = new Employee("John Doe");
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+
         em.persist(employee);
 
         em.getTransaction().commit();
