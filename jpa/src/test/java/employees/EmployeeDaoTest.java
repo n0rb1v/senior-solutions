@@ -38,10 +38,19 @@ class EmployeeDaoTest {
         Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
         employeeDao.save(employee);
 
-        long id = employee.getId();
+        Long id = employee.getId();
 
-        Employee another = employeeDao.findById(id);
-        assertEquals("John Doe",another.getName());
+//        Employee another = employeeDao.findById(id);
+//        assertEquals("John Doe",another.getName());
+    }
+    @Test
+    void test10save() {
+        for (int i = 0; i < 10; i++) {
+            employeeDao.save(new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11)));
+        }
+        Employee employee = employeeDao.listAll().get(0);
+        assertEquals("John Doe",employee.getName());
+
     }
 
     @Test
@@ -84,5 +93,25 @@ class EmployeeDaoTest {
         Employee employee = employeeDao.listAll().get(0);
 
         assertEquals(LocalDate.of(2000,1,11),employee.getBirth());
+    }
+    @Test
+    void testChangeState() {
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        employeeDao.save(employee);
+        employee.setName("Jack Doe");
+        Employee modified = employeeDao.findById(employee.getId());
+        assertEquals("John Doe",modified.getName());
+        assertEquals(false,employee == modified);
+    }
+
+    @Test
+    void testMerge() {
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        employeeDao.save(employee);
+        employee.setName("Jack Doe");
+        employeeDao.update(employee);
+
+        Employee modified = employeeDao.findById(employee.getId());
+        assertEquals("Jack Doe", modified.getName());
     }
 }

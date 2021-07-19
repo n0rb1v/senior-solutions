@@ -19,12 +19,12 @@ public class EmployeesMain {
 
         em.getTransaction().commit();
 
-        long id = employee.getId();
-        employee = em.find(Employee.class, id);
-        System.out.println(employee);
-
-        em.getTransaction().begin();
-        employee = em.find(Employee.class,id);
+//        long id = employee.getId();
+//        employee = em.find(Employee.class, id);
+//        System.out.println(employee);
+//
+//        em.getTransaction().begin();
+//        employee = em.find(Employee.class,id);
         employee.setName("John Jack Doe");
         em.getTransaction().commit();
 
