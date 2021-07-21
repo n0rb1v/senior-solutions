@@ -25,6 +25,15 @@ public class EmployeeDao {
         em.close();
         return employee;
     }
+    public Employee findByIdNicknames(Long id) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Employee employee = em
+                .createQuery("select e from Employee e join fetch e.nicknames where id = :id",Employee.class)
+                .setParameter("id",id)
+                .getSingleResult();
+        em.close();
+        return employee;
+    }
 
     public List<Employee> listAll() {
         EntityManager em = entityManagerFactory.createEntityManager();
@@ -59,4 +68,23 @@ public class EmployeeDao {
         entityManager.getTransaction().commit();
         entityManager.close();
     }
+
+    public Employee findByIdVacations(Long id) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Employee employee = em
+                .createQuery("select e from Employee e join fetch e.vacationBookings where id = :id",Employee.class)
+                .setParameter("id",id)
+                .getSingleResult();
+        em.close();
+        return employee;
+    }
+
+    public Employee findByIdPhone(Long id) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Employee employee = em
+                .createQuery("select e from Employee e join fetch e.phoneNumbers where id = :id",Employee.class)
+                .setParameter("id",id)
+                .getSingleResult();
+        em.close();
+        return employee;    }
 }

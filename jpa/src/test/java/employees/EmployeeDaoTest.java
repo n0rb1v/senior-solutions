@@ -11,6 +11,8 @@ import javax.persistence.Persistence;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EmployeeDaoTest {
 
     private EmployeeDao employeeDao;
+
     @BeforeEach
     void init() throws SQLException {
 //        MariaDbDataSource dataSource = new MariaDbDataSource();
@@ -35,7 +38,7 @@ class EmployeeDaoTest {
 
     @Test
     void testSave() {
-        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
         employeeDao.save(employee);
 
         Long id = employee.getId();
@@ -43,40 +46,42 @@ class EmployeeDaoTest {
 //        Employee another = employeeDao.findById(id);
 //        assertEquals("John Doe",another.getName());
     }
+
     @Test
     void test10save() {
         for (int i = 0; i < 10; i++) {
-            employeeDao.save(new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11)));
+            employeeDao.save(new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11)));
         }
         Employee employee = employeeDao.listAll().get(0);
-        assertEquals("John Doe",employee.getName());
+        assertEquals("John Doe", employee.getName());
 
     }
 
     @Test
     void testListAll() {
-        employeeDao.save(new Employee("John Doe", Employee.EmployeeType.FULL_TIME,LocalDate.now()));
-        employeeDao.save(new Employee("Jack Doe", Employee.EmployeeType.HALF_TIME,LocalDate.now()));
+        employeeDao.save(new Employee("John Doe", Employee.EmployeeType.FULL_TIME, LocalDate.now()));
+        employeeDao.save(new Employee("Jack Doe", Employee.EmployeeType.HALF_TIME, LocalDate.now()));
 
         List<Employee> employees = employeeDao.listAll();
-        assertEquals(List.of("Jack Doe", "John Doe"),employees.stream().map(Employee::getName).collect(Collectors.toList()));
+        assertEquals(List.of("Jack Doe", "John Doe"), employees.stream().map(Employee::getName).collect(Collectors.toList()));
     }
 
     @Test
     void testChange() {
-        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
         employeeDao.save(employee);
 
         long id = employee.getId();
 
-        employeeDao.changeName(id,"Jack Doe");
+        employeeDao.changeName(id, "Jack Doe");
 
         Employee another = employeeDao.findById(id);
-        assertEquals("Jack Doe",another.getName());
+        assertEquals("Jack Doe", another.getName());
     }
+
     @Test
     void testDelete() {
-        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
         employeeDao.save(employee);
 
         long id = employee.getId();
@@ -85,33 +90,72 @@ class EmployeeDaoTest {
 
         List<Employee> employees = employeeDao.listAll();
 
-        assertEquals(0,employees.size());
+        assertEquals(0, employees.size());
     }
+
     @Test
     void testAttributes() {
-        employeeDao.save(new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11)));
+        employeeDao.save(new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11)));
         Employee employee = employeeDao.listAll().get(0);
 
-        assertEquals(LocalDate.of(2000,1,11),employee.getBirth());
+        assertEquals(LocalDate.of(2000, 1, 11), employee.getBirth());
     }
+
     @Test
     void testChangeState() {
-        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
         employeeDao.save(employee);
         employee.setName("Jack Doe");
         Employee modified = employeeDao.findById(employee.getId());
-        assertEquals("John Doe",modified.getName());
-        assertEquals(false,employee == modified);
+        assertEquals("John Doe", modified.getName());
+        assertEquals(false, employee == modified);
     }
 
     @Test
     void testMerge() {
-        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000,1,11));
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
         employeeDao.save(employee);
         employee.setName("Jack Doe");
         employeeDao.update(employee);
 
         Employee modified = employeeDao.findById(employee.getId());
         assertEquals("Jack Doe", modified.getName());
+    }
+
+    @Test
+    void testNicknames() {
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
+        employee.setNicknames(Set.of("Johnny", "J"));
+        employeeDao.save(employee);
+
+        Employee another = employeeDao.findByIdNicknames(employee.getId());
+        assertEquals(Set.of("Johnny", "J"), another.getNicknames());
+    }
+
+    @Test
+    void testVacations() {
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
+        employee.setVacationBookings(Set.of(
+                new VacationEntry(LocalDate.of(2018, 1, 1), 4),
+                new VacationEntry(LocalDate.of(2018, 2, 15), 2)
+        ));
+        employeeDao.save(employee);
+
+        Employee another = employeeDao.findByIdVacations(employee.getId());
+        assertEquals(2, another.getVacationBookings().size());
+    }
+
+    @Test
+    void testPhonenumbers() {
+        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
+        employee.setPhoneNumbers(Map.of(
+                "home","123456789",
+                "work","987654321"
+        ));
+        employeeDao.save(employee);
+
+        Employee another = employeeDao.findByIdPhone(employee.getId());
+        assertEquals("123456789", another.getPhoneNumbers().get("home"));
+
     }
 }
