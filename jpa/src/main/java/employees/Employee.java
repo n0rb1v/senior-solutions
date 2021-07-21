@@ -2,8 +2,7 @@ package employees;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "employees")
@@ -29,21 +28,29 @@ public class Employee {
 
     private LocalDate birth;
     @ElementCollection //(fetch = FetchType.EAGER)
-    @CollectionTable(name = "nicknames",joinColumns = @JoinColumn(name = "emp_id"))
+    @CollectionTable(name = "nicknames", joinColumns = @JoinColumn(name = "emp_id"))
     @Column(name = "nickname")
     private Set<String> nicknames;
 
     @ElementCollection
-    @CollectionTable(name = "bookings",joinColumns = @JoinColumn(name = "emp_id"))
-    @AttributeOverride(name = "startDate",column = @Column(name = "start_date"))
-    @AttributeOverride(name = "daysTaken",column = @Column(name = "days"))
+    @CollectionTable(name = "bookings", joinColumns = @JoinColumn(name = "emp_id"))
+    @AttributeOverride(name = "startDate", column = @Column(name = "start_date"))
+    @AttributeOverride(name = "daysTaken", column = @Column(name = "days"))
     private Set<VacationEntry> vacationBookings;
 
-    @ElementCollection
-    @CollectionTable(name = "phone_numbers",joinColumns = @JoinColumn(name = "emp_id"))
-    @MapKeyColumn(name = "phone_type")
-    @Column(name = "phone_number")
-    private Map<String,String> phoneNumbers;
+//    @ElementCollection
+//    @CollectionTable(name = "phone_numbers",joinColumns = @JoinColumn(name = "emp_id"))
+//    @MapKeyColumn(name = "phone_type")
+//    @Column(name = "phone_number")
+//    private Map<String,String> phoneNumbers;
+
+    @OneToOne
+    private ParkingPlace parkingPlace;
+
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},mappedBy = "employee")
+//    @OrderBy("type")
+    @OrderColumn(name = "pos")
+    private List<PhoneNumber> phoneNumbers;
 
     public Employee() {
     }
@@ -54,6 +61,10 @@ public class Employee {
 //        this.employeeType = employeeType;
 //        this.birth = birth;
 //    }
+
+    public Employee(String name) {
+        this.name = name;
+    }
 
     public Employee(String name, EmployeeType employeeType, LocalDate birth) {
         this.name = name;
@@ -66,13 +77,13 @@ public class Employee {
         System.out.println(name + id);
     }
 
-    public Map<String, String> getPhoneNumbers() {
-        return phoneNumbers;
-    }
+//    public Map<String, String> getPhoneNumbers() {
+//        return phoneNumbers;
+//    }
 
-    public void setPhoneNumbers(Map<String, String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
-    }
+//    public void setPhoneNumbers(Map<String, String> phoneNumbers) {
+//        this.phoneNumbers = phoneNumbers;
+//    }
 
     public Set<String> getNicknames() {
         return nicknames;
@@ -116,6 +127,30 @@ public class Employee {
 
     public void setBirth(LocalDate birth) {
         this.birth = birth;
+    }
+
+    public ParkingPlace getParkingPlace() {
+        return parkingPlace;
+    }
+
+    public void setParkingPlace(ParkingPlace parkingPlace) {
+        this.parkingPlace = parkingPlace;
+    }
+
+    public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
+    }
+
+    public void addPhoneNumber(PhoneNumber phoneNumber) {
+        if (phoneNumbers == null) {
+            phoneNumbers = new ArrayList<>();
+        }
+        phoneNumbers.add(phoneNumber);
+        phoneNumber.setEmployee(this);
+    }
+
+    public List<PhoneNumber> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
     @Override

@@ -145,17 +145,50 @@ class EmployeeDaoTest {
         assertEquals(2, another.getVacationBookings().size());
     }
 
+//    @Test
+//    void testPhonenumbers() {
+//        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
+//        employee.setPhoneNumbers(Map.of(
+//                "home","123456789",
+//                "work","987654321"
+//        ));
+//        employeeDao.save(employee);
+//
+//        Employee another = employeeDao.findByIdPhone(employee.getId());
+//        assertEquals("123456789", another.getPhoneNumbers().get("home"));
+//    }
+
     @Test
-    void testPhonenumbers() {
-        Employee employee = new Employee("John Doe", Employee.EmployeeType.HALF_TIME, LocalDate.of(2000, 1, 11));
-        employee.setPhoneNumbers(Map.of(
-                "home","123456789",
-                "work","987654321"
-        ));
+    void testPhoneNumber(){
+        PhoneNumber p1 = new PhoneNumber("home","1234567");
+        PhoneNumber p2 = new PhoneNumber("work","7654321");
+
+        Employee employee = new Employee("John Doe");
+        employee.addPhoneNumber(p2);
+        employee.addPhoneNumber(p1);
         employeeDao.save(employee);
 
         Employee another = employeeDao.findByIdPhone(employee.getId());
-        assertEquals("123456789", another.getPhoneNumbers().get("home"));
+        assertEquals(2,another.getPhoneNumbers().size());
+        assertEquals("home",another.getPhoneNumbers().get(1).getType());
+    }
+    @Test
+    void testAddPhoneNumber(){
+        Employee employee = new Employee("John Doe");
+        employeeDao.save(employee);
+        employeeDao.addPhoneNumber(employee.getId(),new PhoneNumber("home","1234567"));
 
+        Employee another = employeeDao.findByIdPhone(employee.getId());
+        assertEquals(1,another.getPhoneNumbers().size());
+    }
+
+    @Test
+    void testRemove() {
+        Employee employee = new Employee("John Doe");
+        employee.addPhoneNumber(new PhoneNumber("home","1234567"));
+        employee.addPhoneNumber(new PhoneNumber("work","7654321"));
+        employeeDao.save(employee);
+
+        employeeDao.delete(employee.getId());
     }
 }

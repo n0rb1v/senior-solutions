@@ -25,11 +25,12 @@ public class EmployeeDao {
         em.close();
         return employee;
     }
+
     public Employee findByIdNicknames(Long id) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Employee employee = em
-                .createQuery("select e from Employee e join fetch e.nicknames where id = :id",Employee.class)
-                .setParameter("id",id)
+                .createQuery("select e from Employee e join fetch e.nicknames where e.id = :id", Employee.class)
+                .setParameter("id", id)
                 .getSingleResult();
         em.close();
         return employee;
@@ -72,8 +73,8 @@ public class EmployeeDao {
     public Employee findByIdVacations(Long id) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Employee employee = em
-                .createQuery("select e from Employee e join fetch e.vacationBookings where id = :id",Employee.class)
-                .setParameter("id",id)
+                .createQuery("select e from Employee e join fetch e.vacationBookings where e.id = :id", Employee.class)
+                .setParameter("id", id)
                 .getSingleResult();
         em.close();
         return employee;
@@ -82,9 +83,20 @@ public class EmployeeDao {
     public Employee findByIdPhone(Long id) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Employee employee = em
-                .createQuery("select e from Employee e join fetch e.phoneNumbers where id = :id",Employee.class)
-                .setParameter("id",id)
+                .createQuery("select e from Employee e join fetch e.phoneNumbers where e.id = :id", Employee.class)
+                .setParameter("id", id)
                 .getSingleResult();
         em.close();
-        return employee;    }
+        return employee;
+    }
+    public void addPhoneNumber(long id,PhoneNumber phoneNumber) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.getTransaction().begin();
+//        Employee employee = em.find(Employee.class,id);
+        Employee employee = em.getReference(Employee.class,id);
+        phoneNumber.setEmployee(employee);
+        em.persist(phoneNumber);
+        em.getTransaction().commit();
+        em.close();
+    }
 }
