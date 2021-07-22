@@ -1,15 +1,19 @@
 package activitytracker;
 
+import org.assertj.core.util.DoubleComparator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withPrecision;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityDaoTest {
@@ -85,4 +89,24 @@ class ActivityDaoTest {
         assertEquals(List.of("abc","bgh","hji"),another.getLabels());
     }
 
+    @Test
+    void findActivityByIdWithTrackPoints() {
+        Activity a1 =new Activity(LocalDateTime.of(2020,1,5,15,21,0),"test1",ActivityType.BIKING);
+        Trackpoint t1 = new Trackpoint(LocalDate.of(2020,5,11),34.5,54.6);
+        Trackpoint t2 = new Trackpoint(LocalDate.of(2020,6,1),36.8,59.3);
+        a1.addTrackPoint(t1);
+//        a1.addTrackPoint(t2);
+        dao.saveActivity(a1);
+//        dao.addTrackpoint(a1.getId(),t1);
+        dao.addTrackpoint(a1.getId(),t2);
+
+        Long id = a1.getId();
+
+        Activity another = dao.findActivityByIdWithTrackPoints(id);
+        assertThat(another.getTrackpoints())
+                .hasSize(2)
+                .extracting("lat")
+                .usingComparatorForType(new DoubleComparator(0.1), Double.class)
+                .contains(34.5, 36.79);
+    }
 }
