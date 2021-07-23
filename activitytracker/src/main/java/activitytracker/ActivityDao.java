@@ -76,17 +76,17 @@ public class ActivityDao {
         return activity;
     }
 
-    public void addTrackpoint(long id,Trackpoint trackpoint) {
+    public void addTrackpoint(long id, Trackpoint trackpoint) {
         EntityManager em = factory.createEntityManager();
         em.getTransaction().begin();
-        Activity activity = em.getReference(Activity.class,id);
+        Activity activity = em.getReference(Activity.class, id);
         trackpoint.setActivity(activity);
         em.persist(trackpoint);
         em.getTransaction().commit();
         em.close();
     }
 
-    public List<Coordinate> findTrackPointCoordinatesByDate(LocalDateTime afterThis, int start, int max){
+    public List<Coordinate> findTrackPointCoordinatesByDate(LocalDateTime afterThis, int start, int max) {
         EntityManager em = factory.createEntityManager();
         List<Coordinate> result = em
                 .createNamedQuery("findTrackPointCoordinatesByDate", Coordinate.class)
@@ -94,7 +94,16 @@ public class ActivityDao {
                 .setFirstResult(start)
                 .setMaxResults(20)
                 .getResultList();
-                //.getResultStream().map(Activity::getTrackpoints).flatMap(List::stream).map(t -> new Coordinate(t.getLat(),t.getLon())).collect(Collectors.toList());
+        //.getResultStream().map(Activity::getTrackpoints).flatMap(List::stream).map(t -> new Coordinate(t.getLat(),t.getLon())).collect(Collectors.toList());
+        em.close();
+        return result;
+    }
+
+    public List<Object[]> findTrackPointCountByActivity() {
+        EntityManager em = factory.createEntityManager();
+        List<Object[]> result = em
+                .createQuery("select a.description,a.trackpoints.size from Activity a order by a.description",Object[].class)
+                .getResultList();
         em.close();
         return result;
     }

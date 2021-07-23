@@ -33,9 +33,9 @@ class AreaDaoTest {
         activityDao.saveActivity(a2);
         activityDao.saveActivity(a3);
 
-        Area area1 = new Area("Budapest");
-        Area area2 = new Area("Eger");
-        Area area3 = new Area("Debrecen");
+        Area area1 = new Area("Pest");
+        Area area2 = new Area("Zala");
+        Area area3 = new Area("Tolna");
 
         area1.addActivity(a1);
         area1.addActivity(a2);
@@ -49,7 +49,21 @@ class AreaDaoTest {
         areaDao.saveArea(area2);
         areaDao.saveArea(area3);
 
-        Area area = areaDao.findAreaByName("Eger");
+        Area area = areaDao.findAreaByName("Zala");
         assertEquals(List.of("test1","test3"),area.getActivities().stream().map(Activity::getDescription).collect(Collectors.toList()));
+    }
+
+    @Test
+    void findAreaMap() {
+        Area area1 = new Area("Pest");
+        area1.getCityMap().put("Budapest", new City("Budapest",5500));
+        area1.getCityMap().put("Taksony", new City("Taksony",1650));
+
+        areaDao.saveArea(area1);
+        long id = area1.getId();
+
+        Area another = areaDao.findAreaMap(id);
+        assertEquals(5500,another.getCityMap().get("Budapest").getPopulation());
+
     }
 }

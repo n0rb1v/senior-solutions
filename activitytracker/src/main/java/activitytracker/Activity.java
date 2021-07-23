@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "activitytracker")
+@SecondaryTable(name = "activity_details", pkJoinColumns = @PrimaryKeyJoinColumn(name = "act_id"))
 @NamedQuery(name = "findTrackPointCoordinatesByDate",query = "select new activitytracker.Coordinate(t.lat,t.lon) from Activity a join a.trackpoints t where a.startTime > :afterThis")
 public class Activity {
     @Id
@@ -40,6 +41,11 @@ public class Activity {
 
     @ManyToMany(mappedBy = "activities")
     private List<Area> areas = new ArrayList<>();
+
+    @Column(table = "activity_details")
+    private int distance;
+    @Column(table = "activity_details")
+    private int duration;
 
     public Activity() {
     }
@@ -124,6 +130,22 @@ public class Activity {
 
     public void setAreas(List<Area> areas) {
         this.areas = areas;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     @Override
