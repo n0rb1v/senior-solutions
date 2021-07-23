@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ActivityDao {
     private EntityManagerFactory factory;
@@ -83,5 +84,18 @@ public class ActivityDao {
         em.persist(trackpoint);
         em.getTransaction().commit();
         em.close();
+    }
+
+    public List<Coordinate> findTrackPointCoordinatesByDate(LocalDateTime afterThis, int start, int max){
+        EntityManager em = factory.createEntityManager();
+        List<Coordinate> result = em
+                .createNamedQuery("findTrackPointCoordinatesByDate", Coordinate.class)
+                .setParameter("afterThis", afterThis)
+                .setFirstResult(start)
+                .setMaxResults(20)
+                .getResultList();
+                //.getResultStream().map(Activity::getTrackpoints).flatMap(List::stream).map(t -> new Coordinate(t.getLat(),t.getLon())).collect(Collectors.toList());
+        em.close();
+        return result;
     }
 }

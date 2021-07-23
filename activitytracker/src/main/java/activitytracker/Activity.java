@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "activitytracker")
+@NamedQuery(name = "findTrackPointCoordinatesByDate",query = "select new activitytracker.Coordinate(t.lat,t.lon) from Activity a join a.trackpoints t where a.startTime > :afterThis")
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Act_name")

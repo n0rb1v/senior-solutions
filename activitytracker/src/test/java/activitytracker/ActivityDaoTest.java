@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withPrecision;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityDaoTest {
@@ -108,5 +107,23 @@ class ActivityDaoTest {
                 .extracting("lat")
                 .usingComparatorForType(new DoubleComparator(0.1), Double.class)
                 .contains(34.5, 36.79);
+    }
+
+    @Test
+    void findTrackPointCoordinatesByDate() {
+        Activity a1 =new Activity(LocalDateTime.of(2017,1,5,15,21,0),"test1",ActivityType.BIKING);
+        Activity a2 =new Activity(LocalDateTime.of(2019,1,5,15,21,0),"test2",ActivityType.BIKING);
+        for (int i = 0; i < 60; i++) {
+            a1.addTrackPoint(new Trackpoint(LocalDate.of(2020,5,11),i,i+1));
+            a2.addTrackPoint(new Trackpoint(LocalDate.of(2020,5,11),i+1,i));
+        }
+        dao.saveActivity(a1);
+        dao.saveActivity(a2);
+
+        Long id = a1.getId();
+
+        List<Coordinate> another = dao.findTrackPointCoordinatesByDate(LocalDateTime.of(2018,1,1,0,0,0),20,20);
+        assertThat(another)
+                .hasSize(20);
     }
 }
