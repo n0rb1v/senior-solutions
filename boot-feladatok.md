@@ -25,9 +25,11 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [ ] Rest Assured séma validáció
 * [ ] Content Negotiation
 * [x] Validáció
-* [ ] Spring Boot konfiguráció
-* [ ] Spring Boot naplózás
-* [ ] Spring JdbcTemplate
-* [ ] Spring Data JPA
-* [ ] MariaDB
-* [ ] Integrációs tesztelés
+* [x] Spring Boot konfiguráció
+* [x] Spring Boot naplózás
+* [x] Spring JdbcTemplate
+* [x] Spring Data JPA
+* [x] MariaDB
+* [x] Integrációs tesztelés
+  [ ] Alkalmazás futtatása Dockerben MariaDB-vel
+  [ ] Séma inicializálás Flyway-jel
