@@ -9,9 +9,12 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Table(name = "meetingrooms")
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class MeetingRoom {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO) //orokles miatt
     private Long id;
     @Column(name = "mr_name")
     private String name;

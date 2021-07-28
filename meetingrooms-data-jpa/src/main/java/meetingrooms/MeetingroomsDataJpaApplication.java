@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MeetingroomsDataJpaApplication implements CommandLineRunner {
 
-//    private final MeetingRoomService service;
-//    private final HelloService helloService;
+    private final MeetingRoomService service;
+    private final HelloService helloService;
 
     public static void main(String[] args) {
         SpringApplication.run(MeetingroomsDataJpaApplication.class, args);
@@ -35,5 +37,12 @@ public class MeetingroomsDataJpaApplication implements CommandLineRunner {
 //        System.out.println(service.getMeetingRoomsByPrefix("Ju%"));
 //        service.deleteAll();
 //        System.out.println(service.getMeetingRooms());
+        service.save(new MeetingRoom("turu",7,7));
+        service.save(new ExtMeetingRoom("dudu",6,6,10_000));
+        service.save(new CompMeetingRoom("nunu",5,5,20));
+        System.out.println(service.getMeetingRooms());
+        System.out.println((ExtMeetingRoom)service.getExactMeetingRoomByName("dudu").get(0));
+        System.out.println((CompMeetingRoom)service.getExactMeetingRoomByName("nunu").get(0));
+
     }
 }
