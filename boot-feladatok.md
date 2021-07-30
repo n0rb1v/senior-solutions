@@ -10,7 +10,7 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [ ] Build és futtatás Gradle használatával
 * [x] Unit és integrációs tesztek
 * [x] Developer Tools
-* [ ] Twelve Factor App
+* [x] Twelve Factor App
 * [x] Bevezetés a Docker használatába
 * [x] Java alkalmazások Dockerrel
 * [ ] Docker Layers
@@ -20,7 +20,7 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [x] REST webszolgáltatások POST és DELETE művelet
 * [x] Státuszkódok és hibakezelés
 * [x] Integrációs tesztelés
-* [ ] Swagger UI
+* [x] Swagger UI
 * [ ] Tesztelés Rest Assured használatával
 * [ ] Rest Assured séma validáció
 * [ ] Content Negotiation
