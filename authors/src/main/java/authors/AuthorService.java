@@ -31,7 +31,7 @@ public class AuthorService {
 
     @Transactional
     public AuthorDTO addBook(CreateBookCommand command,long id) {
-        Author author = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        Author author = repo.findById(id).orElseThrow(() -> new AuthorNotFoundException());
         author.addBook(new Book(command.getIsbn(), command.getTitle()));
 
         return modelMapper.map(author,AuthorDTO.class);
@@ -39,5 +39,12 @@ public class AuthorService {
 
     public void deleteAuthor(long id) {
         repo.deleteById(id);
+    }
+
+    @Transactional
+    public AuthorDTO updateName(long id, String name) {
+        Author author = repo.findById(id).orElseThrow(() -> new AuthorNotFoundException());
+        author.setName(name);
+        return modelMapper.map(author,AuthorDTO.class);
     }
 }

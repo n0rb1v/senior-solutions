@@ -1,6 +1,7 @@
 package authors;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Book {
     private String isbn;
     private String title;
     @ManyToOne
+    @EqualsAndHashCode.Exclude
     private Author author;
 
     public Book(String isbn, String title) {
